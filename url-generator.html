@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>署名用URL生成（作業員用）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 16px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      font-size: 18px;
+      padding: 12px;
+      margin-top: 20px;
+    }
+    .note {
+      font-size: 12px;
+      color: #555;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>作業完了サイン用URL生成</h2>
+
+<label for="workId">作業番号（必須）</label>
+<input
+  id="workId"
+  type="text"
+  placeholder="例：WO-20260428-001"
+/>
+
+<label for="summary">作業概要</label>
+<input
+  id="summary"
+  type="text"
+  placeholder="例：定期点検"
+/>
+
+<label for="date">作業日</label>
+<input id="date" type="date" />
+
+<button onclick="openSignature()">署名ページを開く</button>
+
+<p class="note">
+  ※ この画面は作業員用です。<br>
+  ※ 署名は作業員のスマホをお客様にお渡しして行います。
+</p>
+
+<script>
+  // 本日の日付を自動セット
+  function setToday() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    document.getElementById("date").value = `${yyyy}-${mm}-${dd}`;
+  }
+  setToday();
+
+  function openSignature() {
+    const workId = document.getElementById("workId").value.trim();
+    const summary = document.getElementById("summary").value.trim();
+    const date = document.getElementById("date").value;
+
+    if (!workId) {
+      alert("作業番号を入力してください。");
+      return;
+    }
+
+    // ★署名ページのURL（ここを自社のURLに変更）
+    const signatureBaseUrl =
+      "https://＜GitHubユーザー名＞.github.io/signature-poc/index.html";
+
+    const url =
+      signatureBaseUrl +
+      "?workId=" + encodeURIComponent(workId) +
+      "&date=" + encodeURIComponent(date) +
+      "&summary=" + encodeURIComponent(summary);
+
+    // 署名ページを開く
+    window.location.href = url;
+  }
+</script>
+
+</body>
+</html>

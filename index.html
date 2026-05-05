@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>作業完了確認サイン</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 10px;
+      overscroll-behavior: none;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    #work-info p {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+    canvas {
+      border: 1px solid #333;
+      width: 100%;
+      height: 200px;
+      touch-action: none;
+    }
+    button {
+      font-size: 16px;
+      padding: 8px 14px;
+      margin: 8px 5px 0 0;
+    }
+    .note {
+      font-size: 12px;
+      color: #555;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>作業完了のご確認</h2>
+
+  <div id="work-info">
+    <p>作業番号：<span id="workId"></span></p>
+    <p>作業日：<span id="date"></span></p>
+    <p>作業概要：<span id="summary"></span></p>
+  </div>
+
+  <p><strong>上記内容をご確認のうえ、サインをお願いします。</strong></p>
+
+  <canvas id="signature"></canvas>
+
+  <div>
+    <button type="button" onclick="clearPad()">クリア</button>
+    <button type="button" onclick="saveSignature()">署名を確定</button>
+  </div>
+
+  <p class="note">
+    ※ iPhone・Androidのどちらでもご利用いただけます<br>
+    ※ これは検証用サンプル画面です
+  </p>
+
+  <!-- 1. ライブラリ本体の読み込み -->
+  <script src="signature_pad.min.js"></script>
+  <!-- 2. 制御用スクリプトの読み込み（または直接記述） -->
+  <script src="signature.js"></script>
+
+</body>
+</html>
