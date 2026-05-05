@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>作業完了確認サイン</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 15px;
+      background-color: #f4f7f9;
+      overscroll-behavior: none; /* 画面のバウンスを防止 */
+    }
+    .card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    h2 { margin: 0 0 12px 0; font-size: 18px; text-align: center; color: #0056b3; }
+    #work-info {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    #work-info p { margin: 4px 0; display: flex; justify-content: space-between; }
+    #work-info span { font-weight: bold; }
+    canvas {
+      border: 2px solid #ced4da;
+      border-radius: 8px;
+      width: 100%;
+      height: 250px;
+      touch-action: none; /* ブラウザのスクロール干渉を防止 */
+      background-color: #fff;
+    }
+    .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+    button {
+      flex: 1;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-clear { background: #6c757d; color: #fff; }
+    .btn-save { background: #28a745; color: #fff; }
+    .note { font-size: 11px; color: #777; margin-top: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>作業完了のご確認</h2>
+  <div id="work-info">
+    <p>作業番号：<span id="workId"></span></p>
+    <p>作業日：<span id="date"></span></p>
+    <p>作業概要：<span id="summary"></span></p>
+  </div>
+  <canvas id="signature"></canvas>
+  <div class="btn-group">
+    <button type="button" class="btn-clear" onclick="clearPad()">書き直す</button>
+    <button type="button" class="btn-save" onclick="saveSignature()">署名を確定</button>
+  </div>
+  <p class="note">※ 枠内にサイン後、「署名を確定」を押してください</p>
+</div>
+
+<!-- 1. ライブラリ本体の読み込み -->
+<script src="signature_pad.min.js"></script>
+<!-- 2. 制御用スクリプトの読み込み -->
+<script src="signature.js"></script>
+</body>
+</html>

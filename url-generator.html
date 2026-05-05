@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>署名用URL生成（作業員用）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* 全体のリセットと基本設定 */
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f9fa; /* 薄いグレーで目に優しく */
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      margin: 0 0 20px 0;
+      font-size: 20px;
+      text-align: center;
+      color: #0056b3;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    /* 入力欄の強化 */
+    input {
+      width: 100%;
+      font-size: 16px; /* 16px以上にするとiPhoneでズームされない */
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      -webkit-appearance: none; /* iOSのデフォルトスタイルを抑止 */
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    /* ボタンを押しやすく */
+    button {
+      width: 100%;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 16px;
+      margin-top: 28px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active {
+      background-color: #0056b3;
+      transform: scale(0.98);
+    }
+
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 20px;
+      padding: 12px;
+      background: #f1f3f5;
+      border-radius: 6px;
+    }
+
+    .required-tag {
+      background: #dc3545;
+      color: #fff;
+      font-size: 10px;
+      padding: 2px 4px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>作業完了サイン用URL生成</h2>
+
+  <label for="workId">作業番号 <span class="required-tag">必須</span></label>
+  <input
+    id="workId"
+    type="text"
+    inputmode="url" 
+    placeholder="例：WO-20260428-001"
+  />
+
+  <label for="summary">作業概要</label>
+  <input
+    id="summary"
+    type="text"
+    placeholder="例：定期点検"
+  />
+
+  <label for="date">作業日</label>
+  <input id="date" type="date" />
+
+  <button onclick="openSignature()">署名ページを表示する</button>
+
+  <p class="note">
+    <strong>【作業員の方へ】</strong><br>
+    入力内容を確認し、「表示する」ボタンを押した後、スマホをお客様にお渡しして署名をいただいてください。
+  </p>
+</div>
+
+<script>
+  // 本日の日付を自動セット
+  function setToday() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    document.getElementById("date").value = `${yyyy}-${mm}-${dd}`;
+  }
+  setToday();
+
+  function openSignature() {
+    const workId = document.getElementById("workId").value.trim();
+    const summary = document.getElementById("summary").value.trim();
+    const date = document.getElementById("date").value;
+
+    if (!workId) {
+      alert("作業番号を入力してください。");
+      return;
+    }
+
+    // ★署名ページのURL（環境に合わせて変更してください）
+    const signatureBaseUrl = "https://fujiwarayasuhiro.github.io/signature-poc/index.html"; 
+
+    const url =
+      signatureBaseUrl +
+      "?workId=" + encodeURIComponent(workId) +
+      "&date=" + encodeURIComponent(date) +
+      "&summary=" + encodeURIComponent(summary);
+
+    // 署名ページを開く
+    window.location.href = url;
+  }
+</script>
+
+</body>
+</html>
