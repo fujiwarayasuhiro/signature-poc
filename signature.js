@@ -49,7 +49,7 @@ function clearPad() {
   signaturePad.clear();
 }
 
-// 6. 保存（焼き込み処理付き）
+// 6. 保存（焼き込み・ファイル名変更処理付き）
 function saveSignature() {
   if (signaturePad.isEmpty()) {
     alert("サインをお願いします。");
@@ -76,10 +76,18 @@ function saveSignature() {
   // PNG化
   const dataURL = canvas.toDataURL("image/png");
 
+  // 【修正箇所】ファイル名に使用できない禁止文字（/ \ ? % * : | " < > など）を「-」に置換
+  const safeSummary = summary.replace(/[/\\?%*:|"<>]/g, '-');
+  // 日時データから記号とスペースを除去（例: "20261025_153000" のような形式にする場合）
+  const formattedDate = now.replace(/[\/\s:]/g, '_');
+
   // ダウンロード処理
   const a = document.createElement("a");
   a.href = dataURL;
-  a.download = `signature_${workId}.png`;
+  
+  // 【修正箇所】ファイル名に「固定文字」「点検名」「完了日時」を組み込み
+  a.download = `お客様手書きサイン_${safeSummary}_${formattedDate}.png`;
+  
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
