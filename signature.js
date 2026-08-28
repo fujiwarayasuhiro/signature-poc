@@ -214,36 +214,36 @@ function saveSignature() {
   // 点検情報を書き込む
   //
   
-  *onst*ratio =
-    Math*max(window.devicePixelRatio || 1, *);
+  const ratio =
+    Math.max(window.devicePixelRatio || 1, 1);
   
   const infoTop =
-   *(canvas.height / ratio) + 25;
+    (canvas.height / ratio) + 25;
   
-  ctx*fillStyle = "#*33";
-  *tx.font = "14px sans-serif";
+  ctx.fillStyle = "#333";
+  ctx.font = "14px sans-serif";
   
-  ctx.*illText(
-    `点検No: ${workId || "－"}*,
+  ctx.fillText(
+    `点検No: ${workId || "－"}`,
     10,
     infoTop
   );
   
-  ctx*fillText(
-    `*検名: ${summary || "－"}`,
+  ctx.fillText(
+    `点検名: ${summary || "－"}`,
     10,
-    in*o*op + 22
+    infoTop + 22
   );
   
   ctx.fillText(
-    `*業所名(施設名): ${siteName || "－"*`,
+    `事業所名(施設名): ${siteName || "－"}`,
     10,
     infoTop + 44
   );
   
-  *tx.fillText(
-    `作業日: ${displayDate*`,
-   *10,
+  ctx.fillText(
+    `作業日: ${displayDate}`,
+    10,
     infoTop + 66
   );
 
