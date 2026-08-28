@@ -6,13 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    /* 全体のリセットと基本設定 */
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
       margin: 0;
       padding: 20px;
-      background-color: #f8f9fa; /* 薄いグレーで目に優しく */
+      background-color: #f8f9fa;
       color: #333;
       line-height: 1.6;
     }
@@ -41,19 +44,18 @@
       color: #555;
     }
 
-    /* 入力欄・セレクトボックスの強化 */
-    input, select {
+    input,
+    select {
       width: 100%;
-      font-size: 16px; /* 16px以上にするとiPhoneでズームされない */
+      font-size: 16px;
       padding: 12px;
       margin-top: 6px;
       border: 1px solid #ccc;
       border-radius: 8px;
       background-color: #fff;
-      -webkit-appearance: none; /* iOSのデフォルトスタイルを抑止 */
+      -webkit-appearance: none;
     }
 
-    /* セレクトボックスの矢印が表示されるように設定（iOS対策含む） */
     select {
       background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat: no-repeat;
@@ -62,18 +64,17 @@
       padding-right: 40px;
     }
 
-    input:focus, select:focus {
+    input:focus,
+    select:focus {
       border-color: #007bff;
       outline: none;
       box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
     }
 
-    /* その他入力欄の初期非表示設定 */
     #otherInputContainer {
       display: none;
     }
 
-    /* ボタンを押しやすく */
     button {
       width: 100%;
       font-size: 18px;
@@ -118,95 +119,176 @@
 <body>
 
 <div class="container">
-  <h2>作業完了サイン用準備画面</h2>
 
-  <label for="workId">点検No <span class="required-tag">必須</span></label>
+  <h2>署名準備画面</h2>
+
+  <label for="workId">点検No</label>
   <input
     id="workId"
-    type="number" 
+    type="number"
     inputmode="numeric"
     placeholder="例：100"
   />
 
-  <label for="summarySelect">点検名</label>
+  <label for="summarySelect">
+    点検名
+    <span class="required-tag">必須</span>
+  </label>
+
   <select id="summarySelect" onchange="toggleOtherInput()">
+
+    <option value="">選択してください</option>
+
     <option value="01.エアコン点検">01.エアコン点検</option>
     <option value="02.吸収冷温水機点検">02.吸収冷温水機点検</option>
     <option value="03.冷却塔点検">03.冷却塔点検</option>
+    <option value="04.チラー冷凍機点検">04.チラー冷凍機点検</option>
+    <option value="05.ボイラー・温水器点検">05.ボイラー・温水器点検</option>
+    <option value="06.ポンプ点検">06.ポンプ点検</option>
+    <option value="07.貯水槽清掃(本社)">07.貯水槽清掃(本社)</option>
+    <option value="08.フロン漏えい点検">08.フロン漏えい点検</option>
+    <option value="09.フロン簡易点検">09.フロン簡易点検</option>
+    <option value="10.作業報告">10.作業報告</option>
+    <option value="11.油地下タンク点検">11.油地下タンク点検</option>
+    <option value="12.工事写真帳">12.工事写真帳</option>
+    <option value="13.水質分析報告">13.水質分析報告</option>
+    <option value="14.空気調和機点検">14.空気調和機点検</option>
+    <option value="15.ろ過器点検">15.ろ過器点検</option>
+    <option value="16.ファンコイル点検">16.ファンコイル点検</option>
+    <option value="17.空気環境測定">17.空気環境測定</option>
+    <option value="18.害虫防除点検">18.害虫防除点検</option>
+    <option value="19.ボイラー性能検査">19.ボイラー性能検査</option>
+    <option value="20.ばい煙測定">20.ばい煙測定</option>
+    <option value="21.巡回点検">21.巡回点検</option>
+    <option value="22.給排気ファン点検">22.給排気ファン点検</option>
+    <option value="23.消防点検">23.消防点検</option>
+    <option value="24.防火対象物点検">24.防火対象物点検</option>
+    <option value="25.防火設備点検">25.防火設備点検</option>
+    <option value="26.GHP点検">26.GHP点検</option>
+    <option value="27.水質受付票">27.水質受付票</option>
+    <option value="28.点検報告">28.点検報告</option>
+    <option value="29.付帯設備点検">29.付帯設備点検</option>
     <option value="その他">その他</option>
+
   </select>
 
-  <!-- 「その他」選択時のみ表示されるエリア -->
   <div id="otherInputContainer">
+
     <label for="summaryOther">点検名(手入力)</label>
+
     <input
       id="summaryOther"
       type="text"
       placeholder="点検名を入力してください"
     />
+
   </div>
 
-  <label for="date">作業日</label>
-  <input id="date" type="date" />
+  <label for="siteName">事業所名(施設名)</label>
 
-  <button onclick="openSignature()">署名ページを表示する</button>
+  <input
+    id="siteName"
+    type="text"
+    placeholder="事業所名(施設名)を入力してください"
+  />
+
+  <label for="date">作業日</label>
+
+  <input
+    id="date"
+    type="date"
+  />
+
+  <button onclick="openSignature()">
+    署名画面に進む
+  </button>
 
   <p class="note">
     <strong>【作業員の方へ】</strong><br>
-    入力内容を確認し、「表示する」ボタンを押した後、スマホをお客様にお渡しして署名をいただいてください。
+    入力内容を確認し、「署名画面に進む」ボタンを押した後、
+    スマホをお客様にお渡しして署名をいただいてください。
   </p>
+
 </div>
 
 <script>
-  // 本日の日付を自動セット
-  function setToday() {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    document.getElementById("date").value = `${yyyy}-${mm}-${dd}`;
+
+function setToday() {
+
+  const today = new Date();
+
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+
+  document.getElementById("date").value =
+    `${yyyy}-${mm}-${dd}`;
+}
+
+setToday();
+
+function toggleOtherInput() {
+
+  const select =
+    document.getElementById("summarySelect");
+
+  const otherContainer =
+    document.getElementById("otherInputContainer");
+
+  if (select.value === "その他") {
+    otherContainer.style.display = "block";
+  } else {
+    otherContainer.style.display = "none";
   }
-  setToday();
+}
 
-  // 「その他」が選択された際の表示切り替え
-  function toggleOtherInput() {
-    const select = document.getElementById("summarySelect");
-    const otherContainer = document.getElementById("otherInputContainer");
-    if (select.value === "その他") {
-      otherContainer.style.display = "block";
-    } else {
-      otherContainer.style.display = "none";
-    }
+function openSignature() {
+
+  const workId =
+    document.getElementById("workId").value.trim();
+
+  const date =
+    document.getElementById("date").value;
+
+  const siteName =
+    document.getElementById("siteName").value.trim();
+
+  const selectValue =
+    document.getElementById("summarySelect").value;
+
+  let summary = selectValue;
+
+  if (!selectValue) {
+    alert("点検名を選択してください。");
+    return;
   }
 
-  function openSignature() {
-    const workId = document.getElementById("workId").value.trim();
-    const date = document.getElementById("date").value;
-    
-    // 点検名の取得（その他なら手入力値を使用）
-    const selectValue = document.getElementById("summarySelect").value;
-    let summary = selectValue;
-    if (selectValue === "その他") {
-      summary = document.getElementById("summaryOther").value.trim();
-    }
+  if (selectValue === "その他") {
 
-    if (!workId) {
-      alert("点検Noを入力してください。");
+    summary =
+      document.getElementById("summaryOther")
+      .value
+      .trim();
+
+    if (!summary) {
+      alert("点検名(手入力)を入力してください。");
       return;
     }
-
-    // 署名ページのURL
-    const signatureBaseUrl = "https://fujiwarayasuhiro.github.io/signature-poc/index.html"; 
-
-    const url =
-      signatureBaseUrl +
-      "?workId=" + encodeURIComponent(workId) +
-      "&date=" + encodeURIComponent(date) +
-      "&summary=" + encodeURIComponent(summary);
-
-    // 署名ページを開く
-    window.location.href = url;
   }
+
+  const signatureBaseUrl =
+    "https://fujiwarayasuhiro.github.io/signature-poc/index.html";
+
+  const url =
+    signatureBaseUrl +
+    "?workId=" + encodeURIComponent(workId) +
+    "&date=" + encodeURIComponent(date) +
+    "&summary=" + encodeURIComponent(summary) +
+    "&siteName=" + encodeURIComponent(siteName);
+
+  window.location.href = url;
+}
+
 </script>
 
 </body>
