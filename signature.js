@@ -16,6 +16,29 @@ const siteName =
   params.get("siteName") || "";
 
 //
+// 作業日表示用
+//
+const today = new Date();
+
+const todayStr =
+  today.getFullYear() + "-" +
+  String(today.getMonth() + 1).padStart(2, "0") + "-" +
+  String(today.getDate()).padStart(2, "0");
+
+let displayDate = date;
+
+if (date === todayStr) {
+
+  const currentTime =
+    String(today.getHours()).padStart(2, "0") + ":" +
+    String(today.getMinutes()).padStart(2, "0") + ":" +
+    String(today.getSeconds()).padStart(2, "0");
+
+  displayDate =
+    `${date} ${currentTime}`;
+}
+
+//
 // 画面表示
 //
 document.getElementById("displayWorkId").textContent =
@@ -153,13 +176,16 @@ function saveSignature() {
   // プレビュー生成用Canvas
   //
   const exportCanvas =
-    document.createElement("canvas");
+  document.createElement("canvas");
 
   exportCanvas.width =
     canvas.width;
-
+  
+  /*
+    下部に情報表示エリアを追加
+  */
   exportCanvas.height =
-    canvas.height;
+  * canvas.height + 120;
 
   const ctx =
     exportCanvas.getContext("2d");
@@ -185,52 +211,40 @@ function saveSignature() {
   );
 
   //
-  // 情報焼き込み
+  // 点検情報を書き込む
   //
-  const ratio =
-    Math.max(window.devicePixelRatio || 1, 1);
-
-  const displayHeight =
-    exportCanvas.height / ratio;
-
-  const now =
-    new Date().toLocaleString("ja-JP");
-
-  ctx.fillStyle = "#333";
-  ctx.font = "14px sans-serif";
-
-  let y = displayHeight - 65;
-
-  if (workId) {
-    ctx.fillText(
-      `点検No: ${workId}`,
-      10,
-      y
-    );
-    y += 15;
-  }
-
-  ctx.fillText(
-    `点検名: ${summary}`,
+  
+  *onst*ratio =
+    Math*max(window.devicePixelRatio || 1, *);
+  
+  const infoTop =
+   *(canvas.height / ratio) + 25;
+  
+  ctx*fillStyle = "#*33";
+  *tx.font = "14px sans-serif";
+  
+  ctx.*illText(
+    `点検No: ${workId || "－"}*,
     10,
-    y
+    infoTop
   );
-
-  y += 15;
-
-  if (siteName) {
-    ctx.fillText(
-      `事業所名: ${siteName}`,
-      10,
-      y
-    );
-    y += 15;
-  }
-
-  ctx.fillText(
-    `完了日時: ${now}`,
+  
+  ctx*fillText(
+    `*検名: ${summary || "－"}`,
     10,
-    y
+    in*o*op + 22
+  );
+  
+  ctx.fillText(
+    `*業所名(施設名): ${siteName || "－"*`,
+    10,
+    infoTop + 44
+  );
+  
+  *tx.fillText(
+    `作業日: ${displayDate*`,
+   *10,
+    infoTop + 66
   );
 
   //
