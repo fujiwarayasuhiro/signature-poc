@@ -1,78 +1,199 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>作業完了確認サイン</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 15px;
-      background-color: #f4f7f9;
-      overscroll-behavior: none; /* 画面のバウンスを防止 */
-    }
-    .card {
-      background: #fff;
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    h2 { margin: 0 0 12px 0; font-size: 18px; text-align: center; color: #0056b3; }
-    #work-info {
-      background: #f8f9fa;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-size: 14px;
-    }
-    #work-info p { margin: 4px 0; display: flex; justify-content: space-between; }
-    #work-info span { font-weight: bold; color: #333; }
-    
-    /* キャンバスの親要素で高さを固定 */
-    .canvas-container {
-      position: relative;
-      width: 100%;
-      height: 250px;
-      margin-bottom: 10px;
-    }
-    canvas {
-      border: 2px solid #ced4da;
-      border-radius: 8px;
-      width: 100%;
-      height: 100%;
-      touch-action: none; /* ブラウザのスクロール干渉を防止 */
-      background-color: #fff;
-    }
-    .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-    button {
-      flex: 1;
-      font-size: 16px;
-      font-weight: bold;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    button:active { opacity: 0.7; }
-    .btn-clear { background: #6c757d; color: #fff; }
-    .btn-save { background: #28a745; color: #fff; }
-    .note { font-size: 11px; color: #777; margin-top: 12px; text-align: center; }
-  </style>
+<meta charset="UTF-8">
+<title>作業完了確認サイン</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 15px;
+  background-color: #f4f7f9;
+  overscroll-behavior: none;
+}
+
+.card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+h2 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  text-align: center;
+  color: #0056b3;
+}
+
+#work-info {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+#work-info p {
+  margin: 4px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+#work-info span {
+  font-weight: bold;
+  color: #333;
+}
+
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 10px;
+}
+
+canvas {
+  border: 2px solid #ced4da;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  background-color: #fff;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+button {
+  flex: 1;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button:active {
+  opacity: 0.7;
+}
+
+.btn-back {
+  background: #17a2b8;
+  color: #fff;
+}
+
+.btn-clear {
+  background: #6c757d;
+  color: #fff;
+}
+
+.btn-save {
+  background: #28a745;
+  color: #fff;
+}
+
+.note {
+  font-size: 11px;
+  color: #777;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* モーダル */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+#previewImage {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background: #fff;
+}
+
+.modal-btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-btn-group button {
+  flex: 1;
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="card">
+
   <h2>作業完了のご確認</h2>
-  
+
   <div id="work-info">
-    <p>点検No：<span id="displayWorkId">読み込み中...</span></p>
-    <p>作業日：<span id="displayDate">読み込み中...</span></p>
-    <p>点検名：<span id="displaySummary">読み込み中...</span></p>
+
+    <p>
+      点検No：
+      <span id="displayWorkId">読み込み中...</span>
+    </p>
+
+    <p>
+      点検名：
+      <span id="displaySummary">読み込み中...</span>
+    </p>
+
+    <p>
+      事業所名(施設名)：
+      <span id="displaySiteName">読み込み中...</span>
+    </p>
+
+    <p>
+      作業日：
+      <span id="displayDate">読み込み中...</span>
+    </p>
+
   </div>
 
   <div class="canvas-container">
@@ -80,17 +201,72 @@
   </div>
 
   <div class="btn-group">
-    <button type="button" class="btn-clear" onclick="clearPad()">書き直す</button>
-    <button type="button" class="btn-save" onclick="saveSignature()">署名を確定</button>
+
+    <button
+      type="button"
+      class="btn-back"
+      onclick="goBack()">
+      戻る
+    </button>
+
+    <button
+      type="button"
+      class="btn-clear"
+      onclick="clearPad()">
+      クリア
+    </button>
+
+    <button
+      type="button"
+      class="btn-save"
+      onclick="saveSignature()">
+      保存
+    </button>
+
   </div>
-  
-  <p class="note">※ 枠内にサイン後、「署名を確定」を押してください</p>
+
+  <p class="note">
+    ※ 枠内にサイン後、「保存」を押してください
+  </p>
+
 </div>
 
-<!-- 1. ライブラリ本体の読み込み -->
-<script src="signature_pad.min.js"></script>
+<!-- 保存確認モーダル -->
 
-<!-- 2. 制御用スクリプトの読み込み（パラメータ表示とCanvas制御の両方を行う） -->
+<div id="previewModal" class="modal">
+
+  <div class="modal-content">
+
+    <h3>この内容で保存しますか？</h3>
+
+    
+
+    <div class="modal-btn-group">
+
+      <button
+        type="button"
+        class="btn-clear"
+        onclick="closeModal()">
+        キャンセル
+      </button>
+
+      <button
+        type="button"
+        class="btn-save"
+        onclick="confirmSave()">
+        保存
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Signature Pad -->
+signature_pad.min.jsscript>
+
+<!-- 制御JS -->
 <script src="signature.js"></script>
 
 </body>
