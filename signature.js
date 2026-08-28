@@ -185,7 +185,7 @@ function saveSignature() {
     下部に情報表示エリアを追加
   */
   exportCanvas.height =
-  * canvas.height + 120;
+    canvas.height + 120;
 
   const ctx =
     exportCanvas.getContext("2d");
