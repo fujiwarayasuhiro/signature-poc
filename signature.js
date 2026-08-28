@@ -1,96 +1,310 @@
-// 1. パラメータ取得と表示
+//
+// URLパラメータ取得
+//
 const params = new URLSearchParams(window.location.search);
-const workId  = params.get("workId")  || "（未指定）";
-const date    = params.get("date")    || "";
-const summary = params.get("summary") || "";
 
-// index.htmlの新しいIDに合わせて表示
-document.getElementById("displayWorkId").textContent = workId;
-document.getElementById("displayDate").textContent = date;
-document.getElementById("displaySummary").textContent = summary;
+const workId =
+  params.get("workId") || "";
 
-// 2. Canvas設定
-const canvas = document.getElementById("signature");
-const signaturePad = new SignaturePad(canvas, {
-  backgroundColor: "rgb(255,255,255)",
-  penColor: "rgb(0, 0, 0)"
-});
+const date =
+  params.get("date") || "";
 
-// 3. 高解像度・リサイズ対応
+const summary =
+  params.get("summary") || "";
+
+const siteName =
+  params.get("siteName") || "";
+
+//
+// 画面表示
+//
+document.getElementById("displayWorkId").textContent =
+  workId || "－";
+
+document.getElementById("displaySummary").textContent =
+  summary || "－";
+
+document.getElementById("displaySiteName").textContent =
+  siteName || "－";
+
+document.getElementById("displayDate").textContent =
+  date || "－";
+
+//
+// Canvas初期化
+//
+const canvas =
+  document.getElementById("signature");
+
+const signaturePad =
+  new SignaturePad(canvas, {
+    backgroundColor: "rgb(255,255,255)",
+    penColor: "rgb(0,0,0)"
+  });
+
+//
+// 高解像度対応
+//
 function resizeCanvas() {
-  const ratio = Math.max(window.devicePixelRatio || 1, 1);
-  
-  // 描画内容を一時保存（リサイズで消えるのを防ぐため）
-  const data = signaturePad.toData();
-  
-  canvas.width = canvas.offsetWidth * ratio;
-  canvas.height = canvas.offsetHeight * ratio;
-  canvas.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
-  
-  signaturePad.clear(); // 内部バッファのリセット
-  signaturePad.fromData(data); // 描画内容を復元
-}
 
-// 初期化時と画面回転時に実行
-window.addEventListener("resize", resizeCanvas);
-// 読み込み直後に実行（少し遅らせるとoffsetWidthが確実に取得できます）
-setTimeout(resizeCanvas, 100);
+  const ratio =
+    Math.max(window.devicePixelRatio || 1, 1);
 
-// 4. スクロール抑止（iOS/Androidの誤動作防止）
-canvas.addEventListener("touchstart", function (e) {
-  if (e.target === canvas) e.preventDefault();
-}, { passive: false });
-canvas.addEventListener("touchmove", function (e) {
-  if (e.target === canvas) e.preventDefault();
-}, { passive: false });
+  const data =
+    signaturePad.toData();
 
-// 5. クリア
-function clearPad() {
+  canvas.width =
+    canvas.offsetWidth * ratio;
+
+  canvas.height =
+    canvas.offsetHeight * ratio;
+
+  canvas
+    .getContext("2d")
+    .setTransform(
+      ratio,
+      0,
+      0,
+      ratio,
+      0,
+      0
+    );
+
   signaturePad.clear();
+
+  if (data.length > 0) {
+    signaturePad.fromData(data);
+  }
 }
 
-// 6. 保存（焼き込み・ファイル名変更処理付き）
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+setTimeout(
+  resizeCanvas,
+  100
+);
+
+//
+// スクロール誤動作防止
+//
+canvas.addEventListener(
+  "touchstart",
+  function(e) {
+
+    if (e.target === canvas) {
+      e.preventDefault();
+    }
+
+  },
+  { passive: false }
+);
+
+canvas.addEventListener(
+  "touchmove",
+  function(e) {
+
+    if (e.target === canvas) {
+      e.preventDefault();
+    }
+
+  },
+  { passive: false }
+);
+
+//
+// 戻る
+//
+function goBack() {
+
+  history.back();
+
+}
+
+//
+// クリア
+//
+function clearPad() {
+
+  signaturePad.clear();
+
+}
+
+//
+// モーダル用
+//
+let previewDataURL = "";
+
+//
+// 保存ボタン
+//
 function saveSignature() {
+
   if (signaturePad.isEmpty()) {
+
     alert("サインをお願いします。");
+
     return;
   }
 
-  // 焼き込み用の準備
-  const ctx = canvas.getContext("2d");
-  const ratio = Math.max(window.devicePixelRatio || 1, 1);
-  
-  // 焼き込む文字の設定
-  ctx.font = "14px sans-serif";
+  //
+  // プレビュー生成用Canvas
+  //
+  const exportCanvas =
+    document.createElement("canvas");
+
+  exportCanvas.width =
+    canvas.width;
+
+  exportCanvas.height =
+    canvas.height;
+
+  const ctx =
+    exportCanvas.getContext("2d");
+
+  //
+  // 白背景
+  //
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(
+    0,
+    0,
+    exportCanvas.width,
+    exportCanvas.height
+  );
+
+  //
+  // サイン画像をコピー
+  //
+  ctx.drawImage(
+    canvas,
+    0,
+    0
+  );
+
+  //
+  // 情報焼き込み
+  //
+  const ratio =
+    Math.max(window.devicePixelRatio || 1, 1);
+
+  const displayHeight =
+    exportCanvas.height / ratio;
+
+  const now =
+    new Date().toLocaleString("ja-JP");
+
   ctx.fillStyle = "#333";
-  const now = new Date().toLocaleString('ja-JP');
-  
-  // 焼き込み位置の計算（左下付近）
-  // 1行目: 点検No
-  ctx.fillText(`点検No: ${workId}`, 10, (canvas.height / ratio) - 35);
-  // 2行目: 点検名
-  ctx.fillText(`点検名: ${summary}`, 10, (canvas.height / ratio) - 20);
-  // 3行目: 署名日時
-  ctx.fillText(`完了日時: ${now}`, 10, (canvas.height / ratio) - 5);
+  ctx.font = "14px sans-serif";
 
-  // PNG化
-  const dataURL = canvas.toDataURL("image/png");
+  let y = displayHeight - 65;
 
-  // 【修正箇所】ファイル名に使用できない禁止文字（/ \ ? % * : | " < > など）を「-」に置換
-  const safeSummary = summary.replace(/[/\\?%*:|"<>]/g, '-');
-  // 日時データから記号とスペースを除去（例: "20261025_153000" のような形式にする場合）
-  const formattedDate = now.replace(/[\/\s:]/g, '_');
+  if (workId) {
+    ctx.fillText(
+      `点検No: ${workId}`,
+      10,
+      y
+    );
+    y += 15;
+  }
 
-  // ダウンロード処理
-  const a = document.createElement("a");
-  a.href = dataURL;
-  
-  // 【修正箇所】ファイル名に「固定文字」「点検名」「完了日時」を組み込み
-  a.download = `お客様手書きサイン_${safeSummary}_${formattedDate}.png`;
-  
+  ctx.fillText(
+    `点検名: ${summary}`,
+    10,
+    y
+  );
+
+  y += 15;
+
+  if (siteName) {
+    ctx.fillText(
+      `事業所名: ${siteName}`,
+      10,
+      y
+    );
+    y += 15;
+  }
+
+  ctx.fillText(
+    `完了日時: ${now}`,
+    10,
+    y
+  );
+
+  //
+  // プレビュー生成
+  //
+  previewDataURL =
+    exportCanvas.toDataURL("image/png");
+
+  document.getElementById(
+    "previewImage"
+  ).src = previewDataURL;
+
+  document.getElementById(
+    "previewModal"
+  ).style.display = "flex";
+}
+
+//
+// モーダル閉じる
+//
+function closeModal() {
+
+  document.getElementById(
+    "previewModal"
+  ).style.display = "none";
+
+}
+
+//
+// 保存確定
+//
+function confirmSave() {
+
+  const now =
+    new Date().toLocaleString("ja-JP");
+
+  const safeSummary =
+    (summary || "未分類")
+      .replace(/[\\/?%*:|"<>]/g, "-");
+
+  const formattedDate =
+    now.replace(/[\/\s:]/g, "_");
+
+  const fileName =
+    `お客様手書きサイン_${safeSummary}_${formattedDate}.png`;
+
+  const a =
+    document.createElement("a");
+
+  a.href = previewDataURL;
+
+  a.download =
+    fileName;
+
   document.body.appendChild(a);
+
   a.click();
+
   document.body.removeChild(a);
 
-  alert("署名画像を保存しました。\nJUST.DBへ画像を添付してください。");
+  closeModal();
+
+  setTimeout(() => {
+
+    const result =
+      confirm(
+        "保存完了\n\n画像を保存しました。"
+      );
+
+    if (result || result === false) {
+
+      window.location.href =
+        "url-generator.html";
+    }
+
+  }, 200);
 }
