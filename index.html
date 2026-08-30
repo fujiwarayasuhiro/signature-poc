@@ -11,40 +11,55 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  margin: 0;
-  padding: 15px;
+  padding: 10px;
   background-color: #f4f7f9;
   overscroll-behavior: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card {
   background: #fff;
-  padding: 16px;
+  padding: 12px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  max-width: 500px;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 h2 {
-  margin: 0 0 12px 0;
-  font-size: 18px;
+  margin: 0 0 8px 0;
+  font-size: 16px;
   text-align: center;
   color: #0056b3;
+  flex-shrink: 0;
 }
 
 #work-info {
   background: #f8f9fa;
-  padding: 10px;
+  padding: 8px;
   border-radius: 8px;
-  margin-bottom: 15px;
-  font-size: 14px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  flex-shrink: 0;
 }
 
 #work-info p {
-  margin: 4px 0;
+  margin: 2px 0;
   display: flex;
   justify-content: space-between;
 }
@@ -56,9 +71,42 @@ h2 {
 
 .canvas-container {
   position: relative;
-  width: 100%;
-  height: 350px;
-  margin-bottom: 10px;
+  width: 95%;
+  margin: 0 auto;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 縦持ち（ポートレート）レイアウト要件: 高さ=利用可能高さ60% */
+@media (orientation: portrait) {
+  .canvas-container {
+    height: 60vh;
+  }
+}
+
+/* 横持ち（ランドスケープ）レイアウト要件: 高さ=利用可能高さ75% */
+@media (orientation: landscape) {
+  .card {
+    padding: 6px;
+  }
+  h2 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+  }
+  #work-info {
+    display: flex;
+    justify-content: space-around;
+    padding: 4px;
+    margin-bottom: 4px;
+  }
+  #work-info p {
+    margin: 0 4px;
+  }
+  .canvas-container {
+    height: 75vh;
+  }
 }
 
 canvas {
@@ -72,15 +120,16 @@ canvas {
 
 .btn-group {
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 8px;
+  margin-top: 8px;
+  flex-shrink: 0;
 }
 
 button {
   flex: 1;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
-  padding: 14px;
+  padding: 10px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -109,8 +158,10 @@ button:active {
 .note {
   font-size: 11px;
   color: #777;
-  margin-top: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
   text-align: center;
+  flex-shrink: 0;
 }
 
 /* モーダル */
@@ -132,25 +183,28 @@ button:active {
 .modal-content {
   background: #fff;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   border-radius: 12px;
-  padding: 20px;
+  padding: 16px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  max-height: 95vh;
+  overflow-y: auto;
 }
 
 .modal-content h3 {
   margin-top: 0;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 #previewImage {
   width: 100%;
-  max-height: 300px;
+  max-height: 55vh;
   object-fit: contain;
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   background: #fff;
 }
 
@@ -231,7 +285,6 @@ button:active {
 
 </div>
 
-<!-- 保存確認モーダル -->
 <div id="previewModal" class="modal">
 
   <div class="modal-content">
@@ -265,10 +318,8 @@ button:active {
 
 </div>
 
-<!-- Signature Pad -->
 <script src="signature_pad.min.js"></script>
 
-<!-- 制御JS -->
 <script src="signature.js"></script>
 
 </body>
