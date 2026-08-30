@@ -308,17 +308,8 @@ function confirmSave() {
   closeModal();
 
   setTimeout(() => {
-
-    const result =
-      confirm(
-        "保存完了\n\n画像を保存しました。"
-      );
-
-    if (result || result === false) {
-
-      window.location.href =
-        "url-generator.html";
-    }
-
+    alert("保存完了\n\n画像を保存しました。");
+    window.location.href = "url-generator.html";
   }, 200);
+
 }
